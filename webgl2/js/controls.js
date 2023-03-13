@@ -1,3 +1,8 @@
+/*
+ * @Author: 
+ * @Date: 2023-03-12 17:12:52
+ * @Descripttion: 
+ */
 
 /*var minLevel = 0;
 var maxLevel = 1;
@@ -26,19 +31,21 @@ var inverseTransform = matrix4Inverse(transform);
 var renderer;
 
 window.addEventListener("load", function(){
-	
+	//* 新建渲染器 from ./js/raycasting.js
 	renderer = new Renderer();
 	initControls();
 	
 });
 
+/**
+ * @description: 初始化 控制器
+ * @return {*}
+ */
 function initControls(){
 
 	var container = document.getElementById("container");
 	var canvas = document.getElementById("canvas");
-
 	var controlsContainer = document.getElementById("controls");
-
 	var downloadButton = document.getElementById("download");
 
 	var zoom = 0.8;
@@ -111,7 +118,7 @@ function initControls(){
 
 		inverseTransform = matrix4Inverse(transform);
 
-		renderer.draw();
+		renderer.draw(); //! 只有当位置发生变换的时候，才重新渲染
 		//requestAnimationFrame(updateTransformation);
 	}
 

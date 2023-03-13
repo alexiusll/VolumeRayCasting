@@ -1,52 +1,53 @@
 #version 300 es
-
+// ==== 全局默认精度 ====
 precision highp float;
 precision highp int;
 precision highp sampler3D;
+// ==== ====
 
-uniform sampler3D tex;
-uniform sampler3D normals;
-uniform sampler2D colorMap;
-uniform samplerCube skybox;
+// ==== 输入纹理 ====
+uniform sampler3D tex; // 三维纹理
+uniform sampler3D normals; // 法线
+uniform sampler2D colorMap; // 颜色 映射表
+// uniform samplerCube skybox; //! 不使用
+// ==== ====
 
-uniform mat4 transform;
-uniform mat4 inverseTransform;
-uniform int depthSampleCount;
-uniform float zScale;
+uniform mat4 transform; // 模型的转换矩阵 (平移 旋转 缩放)
+uniform mat4 inverseTransform; // 模型的转换矩阵 的 逆
+uniform int depthSampleCount; // 光线投射算法：射线的采样数量
+uniform float zScale; //? 可能是层厚
+uniform float brightness; // 整体的亮度
 
-uniform float brightness;
-
-uniform vec3 lightPosition;
-
-//uniform vec4 opacitySettings;
+// uniform vec3 lightPosition; //! 不使用
+// uniform vec4 opacitySettings;
 // x: minLevel
 // y: maxLevel
 // z: lowNode
 // w: highNode
 
-in vec2 texCoord;
+in vec2 texCoord; //* 窗口的坐标
 
 //in vec4 origin;
 //in vec4 direction;
 
 out vec4 color;
 
-const vec3 ambientLight = vec3(0.34, 0.32, 0.32);
-//const vec3 ambientLight = vec3(0.0, 0.0, 0.0);
-const vec3 directionalLight = vec3(0.5, 0.5, 0.5);
-const vec3 lightVector = normalize(vec3(-1.0, 0.0, 0.0));
-const vec3 specularColor = vec3(0.5, 0.5, 0.5);
-
-const float specularIntensity = 0.2;
-const float shinyness = 5.0;
-const float scatterFactor = 2.0;
-const float reflectScattering = 1.0;
+// const vec3 ambientLight = vec3(0.34, 0.32, 0.32);
+// const vec3 ambientLight = vec3(0.0, 0.0, 0.0);
+// const vec3 directionalLight = vec3(0.5, 0.5, 0.5);
+// const vec3 lightVector = normalize(vec3(-1.0, 0.0, 0.0));
+// const vec3 specularColor = vec3(0.5, 0.5, 0.5);
+// const float specularIntensity = 0.2;
+// const float shinyness = 5.0;
+// const float scatterFactor = 2.0;
+// const float reflectScattering = 1.0;
 
 vec3 aabb[2] = vec3[2](
 	vec3(0.0, 0.0, 0.0),
 	vec3(1.0, 1.0, 1.0)
 );
 
+//* 光线的数据结构
 struct Ray {
     vec3 origin;
     vec3 direction;

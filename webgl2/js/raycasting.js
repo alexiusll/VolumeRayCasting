@@ -1,5 +1,8 @@
-
-
+/*
+ * @Author: 
+ * @Date: 2023-03-12 17:12:52
+ * @Descripttion: 
+ */
 
 var volumes = {
 	 sagittal: {
@@ -110,7 +113,6 @@ var shaders = {
 	}*/
 }
 
-
 var Renderer = function(){
 	
 	var img = document.getElementById("slice");
@@ -129,7 +131,11 @@ var Renderer = function(){
 	canvas.height = container.clientHeight;
 	var aspect = canvas.width / canvas.height;
 	
+	//* 设置渲染上下文 
+	// https://developer.mozilla.org/zh-CN/docs/Web/API/WebGLRenderingContext
+	//* preserveDrawingBuffer 如果这个值为true缓冲区将不会被清除，会保存下来，直到被清除或被使用者覆盖。
 	var gl = canvas.getContext("webgl2", {preserveDrawingBuffer: true});
+
 	var shaderProgram;
 	var size;
 
@@ -688,10 +694,12 @@ var Renderer = function(){
 	
 	var changed = true;
 	render();
-
+    
+	//* 渲染循环 
 	function render(){
+		// 是否更新模型
 		if(changed){
-			gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+			gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT | gl.STENCIL_BUFFER_BIT); //清除缓冲区
 			gl.uniformMatrix4fv(transformRef, false, transform);
 			gl.uniformMatrix4fv(inverseTransformRef, false, inverseTransform);
 			//gl.uniform4f(opacitySettingsRef, Math.pow(minLevel, 2), Math.pow(maxLevel, 2), lowNode, highNode);
@@ -703,13 +711,17 @@ var Renderer = function(){
 			
 			changed = false;
 		}
-		requestAnimationFrame(render);
+
+		//* https://developer.mozilla.org/zh-CN/docs/Web/API/window/requestAnimationFrame
+		// 告诉浏览器——你希望执行一个动画，并且要求浏览器在下次重绘之前调用指定的回调函数更新动画。
+		// 该方法需要传入一个回调函数作为参数，该回调函数会在浏览器下一次重绘之前执行
+		requestAnimationFrame(render); // 渲染循环
 	}
 
 	//render();
-
+    
+	//* 执行渲染
 	function draw(){
-
 		changed = true;
 	}
 

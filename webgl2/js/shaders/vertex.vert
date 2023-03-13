@@ -1,8 +1,11 @@
 #version 300 es
  
+//* aspect 窗口比例 例如 16:9
+//* var aspect = canvas.width / canvas.height;
 uniform float aspect;
 //uniform float zScale;
 //uniform mat4 transform;
+
 in vec2 coordinates;
 out vec2 texCoord;
 
